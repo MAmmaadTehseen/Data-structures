@@ -3,12 +3,13 @@ using namespace std;
 class Node
 {
     int data;
-    Node *next;
+    Node *next,*prev;
 public:
-    Node(int data,Node *next=NULL) //parameterized constructor
+    Node(int data,Node *next=NULL,Node *prev=NULL) //parameterized constructor
     {
         this->data=data;
         this->next=next;
+        this->prev=prev;
     } 
     void setNext(Node *next)// setter
     {
