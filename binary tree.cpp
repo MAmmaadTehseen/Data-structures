@@ -64,7 +64,6 @@ class BSTree
 	Node* getParent(int x)
 	{
 		Node *q,*parent=NULL;
-		
 		q=root;
 		while(q!=NULL)
 		{
@@ -178,9 +177,10 @@ class BSTree
 //delete
 	bool del(int x)
 	{
+		if(getNode(x)==NULL) return false;
 		Node *q=getNode(x);
-		if(q!=NULL)
-		{
+		
+		
 			if(isLeaf(q))
 			{
 				delLeaf(q);
@@ -194,60 +194,64 @@ class BSTree
 				delSingleParent(q);
 			}
 			return true;
-		}
-		return false;
+		
+		
 	}	
 	
 	
 //delfullParent
-	void delFullParent(Node *root)
+	void delFullParent(Node *r)
 	{
-		Node *q=root;
+		Node *q=r;
 		q=q->right;
 		while(q->left!=NULL)
 		{
 			q=q->left;
 		}	
-		root->data=q->data;
-		root->data>q->data?root->right=q->right:root->left=q->right;
+		r->data=q->data;
 		if(isLeaf(q))
 		{
-			getParent(q->data)->right==q?getParent(q->data)->right=NULL:getParent(q->data)->left=NULL;
+			delLeaf(q);
 		}
-		delete root;
+		else
+		{
+			delSingleParent(q);
+		}
+		delete q;
 	}	
 //delleaf
-	void delLeaf(Node *root)
+	void delLeaf(Node *r)
 	{
-		int x=root->data;
-		root==getParent(x)->right?getParent(x)->right=NULL:getParent(x)->left=NULL;
-		delete root;
+		int x=r->data;
+		r==getParent(x)->right?getParent(x)->right=NULL:getParent(x)->left=NULL;
+		delete r;
 	}
 //delSingleParent
-	void delSingleParent(Node *root)
+	void delSingleParent(Node *r)
 	{
-		Node *x=getParent(root->data);
-		if(x->right==root) 
+		Node *x=getParent(r->data);
+		if(x->right==r) 
 		{
-			x->right=getChild(root);
+			x->right=getChild(r);
 		}
 		else 
 		{
-			x->left=getChild(root);	
+			x->left=getChild(r);	
 		}
-		delete root;		
+		delete r;		
 	}		
 //getChild
 	Node* getChild(Node *root)
 	{
-		if(isLeaf(root))
+		if(!isLeaf(root))
 		{
-			if(root->left==NULL)
+			if(root->right!=NULL)
 			{
 				return root->right;
 			}
 			return root->left;
 		}
+		return NULL;
 		
 	}	
 
@@ -264,6 +268,7 @@ int main()
 	t1.insert(1);
 	t1.Print();
 	t1.del(5);
+
 	cout<<"\n";
 	t1.Print();
 
