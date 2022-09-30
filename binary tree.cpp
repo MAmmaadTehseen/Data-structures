@@ -16,8 +16,8 @@ class Node
 };
 class BSTree
 {
-    Node *root;
     public:
+    Node *root;
 //isEmpty
     bool isEmpty()
     {
@@ -26,7 +26,7 @@ class BSTree
 //preOrder		
     void preOrder(Node *root)
 	{
-		if(isEmpty())
+		if(root==NULL)
 		{return;
 	
 		}
@@ -37,7 +37,7 @@ class BSTree
 //postOrder	
 	void postOrder(Node *root)
 	{
-		if(isEmpty())
+		if(root==NULL)
 		{return;
 	
 		}
@@ -60,7 +60,7 @@ class BSTree
 	{
 		inOrder(root);
 	}
-//findParent
+//getParent
 	Node* getParent(int x)
 	{
 		Node *q,*parent=NULL;
@@ -68,7 +68,15 @@ class BSTree
 		while(q!=NULL)
 		{
 			parent=q;
-			q->data<x?q=q->right:q=q->left;
+			if(q->data<x)
+			{
+			q=q->right;
+			}
+			else
+			{
+			q=q->left;
+			}
+			
 		}
 		return parent;
 	}
@@ -117,44 +125,53 @@ class BSTree
 		return root->right;	
 	}		
 //getLeftMost    
-    int getLeftMost(Node *root)
-	{
-		Node *temp=root;
-		if(temp->left==NULL)
-		{
-			return temp->data;
-		}
-		getLeftMost(root->left);
+//    Node getLeftMost(Node *r)
+//	{
+//		
+//		if(r->left==NULL)
+//		{
+//			return r;
+//		}
+//		getLeftMost(r->left);
+//	}
 		
-	}
 //getRightMost
-	int getRightMost(Node *root)
-	{
-		Node *temp=root;
-		if(temp->right==NULL)
-		{
-			return temp->data;
-		}
-		getRightMost(root->right);
-	
-	}
+//	Node getRightMost(Node *root)
+//	{
+//		Node *temp=root;
+//		if(temp->right==NULL)
+//		{
+//			return temp;
+//		}
+//		getRightMost(root->right);
+//	
+//	}
 
 //successor
-	int getSuccessor(int x)
-	{
-		if(getNode(x)->right!=NULL)
-		{
-			return getLeftMost(getNode(x)->right);
-		}
-	}
-//predecessor
-	int getPredecessor(int x)
-	{
-		if(getNode(x)->left!=NULL)
-		{
-			return getRightMost(getNode(x)->left);
-		}
-	}
+//	Node getSuccessor(Node *r)
+//	{
+//		if(r->right!=NULL)
+//		{
+//			getLeftMost(r->right);
+//			
+//		}
+//		else
+//		{
+//			if(r->data>getParent(r->data)) return NULL;
+//			else return getParent(r->data);
+//			
+//		}
+//		
+//		
+//	}
+////predecessor
+//	int getPredecessor(int x)
+//	{
+//		if(getNode(x)->left!=NULL)
+//		{
+//			return getRightMost(getNode(x)->left);
+//		}
+//	}
 //visitRoot    
 	void visitRoot(Node *root)
 	{
@@ -177,8 +194,8 @@ class BSTree
 //delete
 	bool del(int x)
 	{
-		if(getNode(x)==NULL) return false;
 		Node *q=getNode(x);
+		if(q==NULL) return false;
 		
 		
 			if(isLeaf(q))
@@ -215,21 +232,33 @@ class BSTree
 		}
 		else
 		{
-			delSingleParent(q);
+			q->data>GetParent(q->data)->data?GetParent(q->data)->right=q->right:GetParent(q->data)->left=q->right;
 		}
-		delete q;
+	}
+//GetParent	
+	Node* GetParent(int x)
+	{
+		Node *q=root;
+		
+		while(!(q->left->data==x||q->right->data==x))
+		{
+			q->data>=x?q=q->left:q=q->right;
+			if(q==NULL)return NULL;
+		}
+		return q;
+				
 	}	
 //delleaf
 	void delLeaf(Node *r)
 	{
 		int x=r->data;
-		r==getParent(x)->right?getParent(x)->right=NULL:getParent(x)->left=NULL;
+		r==GetParent(x)->right?GetParent(x)->right=NULL:GetParent(x)->left=NULL;
 		delete r;
 	}
 //delSingleParent
 	void delSingleParent(Node *r)
 	{
-		Node *x=getParent(r->data);
+		Node *x=GetParent(r->data);
 		if(x->right==r) 
 		{
 			x->right=getChild(r);
@@ -241,15 +270,15 @@ class BSTree
 		delete r;		
 	}		
 //getChild
-	Node* getChild(Node *root)
+	Node* getChild(Node *r)
 	{
-		if(!isLeaf(root))
+		if(isSingleParent(r))
 		{
-			if(root->right!=NULL)
+			if(r->right!=NULL)
 			{
-				return root->right;
+				return r->right;
 			}
-			return root->left;
+			return r->left;
 		}
 		return NULL;
 		
@@ -259,18 +288,20 @@ class BSTree
 int main()
 {
 	BSTree t1;
-	t1.insert(8);	
-	t1.insert(3);
-	t1.insert(5);
-	t1.insert(4);
+	t1.insert(14);
+	t1.insert(10);
+	t1.insert(16);
+	t1.insert(7);
 	t1.insert(6);
-	t1.insert(7);	
-	t1.insert(1);
+	t1.insert(9);	
+	t1.insert(15);	
+	t1.insert(18);
+	t1.insert(20);
+	t1.insert(17);
+	
 	t1.Print();
-	t1.del(5);
-
-	cout<<"\n";
+//	t1.del(15);
+	
+	cout<<endl<<t1.GetParent(6)->data<<endl;
 	t1.Print();
-
-
 }
