@@ -300,8 +300,8 @@ int main()
 	t1.insert(17);
 	
 	t1.Print();
-//	t1.del(15);
+	t1.del(18);
 	
-	cout<<endl<<t1.GetParent(6)->data<<endl;
+	cout<<endl<<t1.GetParent(10)->data<<endl;
 	t1.Print();
 }
